@@ -1,0 +1,67 @@
+---
+- name: Private subnet
+  hosts: localhost
+  gather_facts: true
+  connection: local
+  vars_files:
+      - group_vars/private-subnet.yml
+  vars:
+      security_group: "{{ security_group_name }}"
+      region: "{{ region_name }}"
+      gpname: "{{ IAM_groupname }}"
+      keypair: "{{ keypair_name }}"
+#      aws_access_key: "{{ access_key }}"
+#      aws_secret_key: "{{ secret_key ]}"
+  tasks:
+    - name: associate subnet to the VPC
+      ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        cidr: "{{ cidr }}"
+#        az: ap-south-1b
+#        aws_access_key: "{{ access_key }}"
+#        aws_secret_key: "{{ secret_key }}"
+        resource_tags:
+          NAME: "{{ requestor_name }}"
+          ENVIRONMENT: "{{ env_name }}"
+          RESOURCE ID: "{{ resource_name }}"
+          BACK UP: "{{ back_up }}"
+          BUSINESS HOURS: "{{ business_hours }}"
+          AUTOMATE: "{{ automate }}"
+          OWNER: "{{ owner }}"
+          COST CENTER: "{{ cost_center_name }}"
+          CUSTOMER: "{{ customer_name }}"
+      register: privatesubnet
+
+    - debug:
+         msg: "private subnet id is: {{privatesubnet.subnet.id}}i"
+
+    - name : Set up private subnet route table
+      ec2_vpc_route_table:
+         vpc_id:         "{{ vpcid.vpc.id }}"
+         region:           "{{ region_name }}"
+         subnets:          "{{ privatesubnet.subnet.id }}"
+         routes:
+           - dest:         '0.0.0.0/0'
+             gateway_id:   "{{ result_nat_gateway.nat_gateway_id }}"
+      register: result_private_route
+
+    - name: Create security group
+      ec2_group:
+        name: "{{ security_group }}"
+        description: security group for db servers
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+ #       aws_access_key: "{{ access_key }}"
+ #       aws_secret_key: "{{ secret_key }}"
+        rules:
+          - proto: tcp
+            ports:
+            - 22
+            cidr_ip: 0.0.0.0/0
+      register: privatesg
+
+    - debug:
+         msg: "security group id for private subnet is: {{privatesg.group_id}}"
+

@@ -1,0 +1,19 @@
+---
+#aws_access_key: xxxxxxxxxxxxxxxxxx
+#aws_secret_key: xxxxxxxxxxxx
+IAM_groupname: ansible-group
+keypair_name: ec2-test
+security_group: db_security_group
+instance_name: db-server
+instancetype: t2.micro
+AMI: ami-0323c3dd2da7fb37d
+region_name: us-east-1
+requestor_name: Naveen
+env_name: DEV
+resource_name: DB-SERVER
+back_up: NA
+business_hours: EST 00-00
+automate: OPT OUT
+owner: naveen1228@gmail.com
+cost_center_name: CLOUD
+customer_name: Devops world
