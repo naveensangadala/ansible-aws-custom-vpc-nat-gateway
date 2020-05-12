@@ -2,6 +2,7 @@
 Ansible-AWS Automation - Creating AWS custom VPC, Subnets, NAT gateway , Application and DB servers
 
 ======
+
 This Repository is for creating AWS custom VPC with public and private subnets and launching an NAT gatway in the public subnet to provide internet access to the private subnet instances by using Ansible playbooks.
 
 1. Creating a VPC , CIDR: 10.22.0.0/16
@@ -29,14 +30,10 @@ once this step is done , then try to execute the below steps to enable the passo
 
 App-server 
 ----------
-ssh-keygen -t rsa
-ssh-copy-id ec2-user@db-server-IP
-ssh-copy-id ec2-user@APP-server-IP
+ssh-keygen -t rsa, ssh-copy-id ec2-user@db-server-IP, ssh-copy-id ec2-user@APP-server-IP
 
 DB-server
 ---------
-ssh-keygen -t rsa
-ssh-copy-id ec2-user@db-server-IP
-ssh-copy-id ec2-user@APP-server-IP
+ssh-keygen -t rsa, ssh-copy-id ec2-user@db-server-IP, ssh-copy-id ec2-user@APP-server-IP
 
 
